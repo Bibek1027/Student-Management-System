@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Student</title>
+</head>
+<body>
+<h2>Delete Student</h2>
+
+<p>Are you sure you want to delete:</p>
+
+<h3>{{ student.name }}</h3>
+<p>Course: {{ student.course }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <button type="submit" style="background:red; color:white;">
+        Yes, Delete
+    </button>
+
+    <a href="/" style="margin-left:10px;">
+        Cancel
+    </a>
+</form>
+</body>
+</html>

@@ -11,14 +11,8 @@
 
         {% csrf_token %}
 
-        Name:
-        <input type="text" name="name" value="{{ student.name }}">
-        <br><br>
-
-        Course:
-        <input type="text" name="course" value="{{ student.course }}">
-        <br><br>
-
+        {{ form.as_p }}
+        
         <button type="submit">Update Student</button>
 
     </form>

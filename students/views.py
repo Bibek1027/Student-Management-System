@@ -1,17 +1,19 @@
 #from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Student
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from .forms import StudentForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def home(request):
 
     search = request.GET.get('search')
 
-    if search:
-        students = Student.objects.filter(name=search)
+    if search: #icontains  is used to search for a substring in the name field of the Student model, ignoring case sensitivity.
+        students = Student.objects.filter(name__icontains=search) 
     else:
         students = Student.objects.all()
 
@@ -26,63 +28,67 @@ def about(request):
 #     return HttpResponse(request.method)
 
 @login_required
+@staff_member_required
 def add_student(request):
-    if not request.user.is_superuser:
-        return redirect('/')
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        course = request.POST.get('course')
-        
-        Student.objects.create(
-            name=name,
-            course=course
-        )
-        
-        messages.success(request, "Student added successfully!")
-
-        
-    return render(request, 'add_student.html')
-
-@login_required
-def update_student(request, id):
-    if not request.user.is_superuser:
-        return redirect('/')
-    
-    student = Student.objects.get(id=id)
+    form = StudentForm()
     
     if request.method == "POST":
-
-        student.name = request.POST.get('name')
-        student.course = request.POST.get('course')
-
-        student.save()
+        form = StudentForm(request.POST)
         
-        messages.success(request, "Student updated successfully!")
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Student added successfully!')
+            return redirect('/')
         
+    return render(request, 'add_student.html', {
+        'form' : form 
+    })
+    
+@login_required
+@staff_member_required
+def update_student(request, id):
+
+    student = get_object_or_404(Student, id=id)
+    
+    form = StudentForm(instance=student)
+    
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Student updated successfully!')
+            return redirect('/')   
+    
     return render(request, 'update_student.html', {
-        'student': student
-        })
+        'form' : form,
+        'student' : student
+    })
 
 @login_required
+@staff_member_required
 def delete_student(request, id):
-    if not request.user.is_superuser:
-        return redirect('/')
 
-    student = Student.objects.get(id=id)
-    student.delete()
+    student = get_object_or_404(Student, id=id)
     
-    messages.success(request, "Student deleted successfully!")
+    if request.method == "POST":
+        student.delete()
+        messages.success(request, 'Student deleted successfully!')
+        return redirect('/')
     
-    return redirect('/')
+    return render(request, 'delete_student.html', {
+        'student' : student
+    })
 
 def signup(request):
-
+    
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Account created successfully!')
             return redirect('/accounts/login/')
 
     else:
