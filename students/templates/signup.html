@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Signup</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h2>Create Account</h2>
+{% block content %}
 
-    <form method="POST">
-        {% csrf_token %}
+<div class="card student-card mx-auto mt-5" style="max-width: 500px;">
 
-        {{ form.as_p }}
+    <div class="card-body">
 
-        <button type="submit">
-            Register
-        </button>
-    </form>
+        <h3 class="text-center mb-4">
+            <i class="bi bi-person-plus-fill"></i>
+            Sign Up
+        </h3>
 
-</body>
-</html>
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success w-100">
+                Create Account
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

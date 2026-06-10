@@ -1,19 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h2>Login Page</h2>
+{% block content %}
 
-    <form method="POST">
-        {% csrf_token %}
+<div class="card student-card mx-auto mt-5" style="max-width: 450px;">
 
-        {{ form.as_p }}
+    <div class="card-body">
 
-        <button type="submit">Login</button>
-    </form>
+        <h3 class="text-center mb-4">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+        </h3>
 
-</body>
-</html>
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter username">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Login
+            </button>
+
+        </form>
+
+        {% if form.errors %}
+            <div class="alert alert-danger mt-3">
+                Invalid username or password
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
