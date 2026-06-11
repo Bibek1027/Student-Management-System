@@ -1,16 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>About</title>
-</head>
-<body>
+{% extends 'base.html' %} {% block content %}
 
-    <a href="/">Home</a> |
-    <a href="/about/">About</a>
+<div class="card student-card mx-auto" style="max-width: 700px">
+  <div class="card-body">
+    <h2 class="mb-3">
+      <i class="bi bi-info-circle-fill"></i>
+      About
+    </h2>
 
-    <h1>About Student Management System</h1>
+    <hr />
 
-    <p>This project is built using Django.</p>
+    <p>
+      Student Management System is a web application that helps manage student
+      records efficiently. It allows users to view student details and enables
+      administrators to add, update, and delete records.
+    </p>
 
-</body>
-</html>
+    <p>
+      The system also provides features such as search, pagination, and secure
+      user authentication for better usability and data management.
+    </p>
+
+    <a href="/" class="btn btn-primary mt-3">
+      <i class="bi bi-house-fill"></i>
+      Back to Home
+    </a>
+  </div>
+</div>
+
+{% endblock %}
